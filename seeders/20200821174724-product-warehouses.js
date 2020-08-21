@@ -1,6 +1,7 @@
 "use strict";
 const { Product, Warehouse } = require("../models");
 const faker = require("faker");
+const { options } = require("../routes/ProductRoutes");
 
 const getPws = (products, warehouses) => {
   const pws = [];
@@ -10,7 +11,10 @@ const getPws = (products, warehouses) => {
         const pw = {
           productId: product.id,
           warehouseId: warehouse.id,
-          item_count: faker.random.number(100, 200),
+          item_count: faker.random.number({
+            min: 100,
+            max: 300,
+          }),
           low_item_threshold: 100,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -23,9 +27,15 @@ const getPws = (products, warehouses) => {
       for (let index = 0; index < products.length; index++) {
         let count = 0;
         if (index <= products.length / 3) {
-          count = faker.random.number(0, 100);
+          count = faker.random.number({
+            min: 0,
+            max: 99,
+          });
         } else {
-          count = faker.random.number(100, 200);
+          count = faker.random.number({
+            min: 100,
+            max: 300,
+          });
         }
         const pw = {
           productId: products[index].id,
@@ -43,9 +53,15 @@ const getPws = (products, warehouses) => {
       for (let index = 0; index < products.length; index++) {
         let count = 0;
         if (index <= products.length / 2) {
-          count = faker.random.number(0, 100);
+          count = faker.random.number({
+            min: 0,
+            max: 99,
+          });
         } else {
-          count = faker.random.number(100, 200);
+          count = faker.random.number({
+            min: 100,
+            max: 300,
+          });
         }
         const pw = {
           productId: products[index].id,
