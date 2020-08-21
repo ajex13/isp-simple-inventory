@@ -18,4 +18,4 @@
  `npm start`
 
 
-Start the Node.js server using this command: `nodemon server/server`
+Start the Node.js server using this command: `nodemon server`
