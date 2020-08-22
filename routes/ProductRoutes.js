@@ -49,4 +49,27 @@ ProductRoute.route("/:id").get(async (req, res) => {
   }
 });
 
+
+ProductRoute.route("/:id").patch(async (req, res) => {
+  const warehouses = req.body.data;
+  try {
+    for (const warehouse of warehouses) {
+      await ProductWarehouse.update({
+        item_count : warehouse.item_count,
+        low_item_threshold : warehouse.low_item_threshold,
+      },{
+        where: {
+          productId : req.params.id,
+          warehouseId : warehouse.warehouseId,
+        }
+      }
+      )
+    }
+    res.status(204).send();
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("There was an issue while updating");
+  }
+});
+
 module.exports = ProductRoute;
