@@ -39,17 +39,13 @@ class ProductList extends Component {
           <td>{product.sku_code}</td>
           <td>{product.name}</td>
           {product.Warehouses.map((warehouse) => {
+              const {item_count,low_item_threshold} = warehouse?.ProductWarehouse;
+              const isCountLow = item_count < low_item_threshold
             return (
-              <React.Fragment>
-                <td class="table-danger">
-                  Count : {warehouse.ProductWarehouse?.item_count} <br />
-                  Theshold: {warehouse.ProductWarehouse?.low_item_threshold}
+                <td class={isCountLow ? "table-danger" : "table-success"}>
+                  Count : {item_count} <br />
+                  Theshold: {low_item_threshold}
                 </td>
-                <td class="table-danger">
-                  Count : {warehouse.ProductWarehouse?.item_count} <br />
-                  Theshold: {warehouse.ProductWarehouse?.low_item_threshold}
-                </td>
-              </React.Fragment>
             );
           })}
         </tr>
@@ -77,7 +73,7 @@ const mapStateToProps = (state) => {
   console.log("globalstate", state);
   return {
     productList: state.products.products,
-    warehouseNames: ["Mumbai", "New Delhi", "Bangalore"], //TBD
+    warehouseNames: state.products.warehouses,
   };
 };
 

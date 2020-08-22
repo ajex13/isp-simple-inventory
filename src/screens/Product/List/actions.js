@@ -2,9 +2,9 @@ import { ALL_PRODUCTS_FETCHED } from "./constants";
 
 const axios = require("axios");
 
-export const fetchAllProducts = () => {
+export const fetchAllProducts = (pageNumber=1, pageSize=20) => {
   return (dispatch) => {
-    let url = `/products`;
+    let url = `/products?pageNumber=${pageNumber}&pageSize=${pageSize}`;
 
     return axios
       .get(url)
@@ -12,7 +12,8 @@ export const fetchAllProducts = () => {
         dispatch({
           type: ALL_PRODUCTS_FETCHED,
           data: {
-            products: data,
+            products: data.products,
+            warehouses: data.warehouses,
           },
         });
       })
