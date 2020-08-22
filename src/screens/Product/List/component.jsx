@@ -3,12 +3,35 @@ import { fetchAllProducts } from "./actions";
 import { connect } from "react-redux";
 import { Button, Table } from "reactstrap";
 import { PlusIcon } from "@primer/octicons-react";
+import InvPagination from "../../../components/InvPagination/component";
 
 class ProductList extends Component {
+  constructor(props){
+    super(props) 
+    this.numberOfRecords = 20;
+  }  
+  
   componentDidMount() {
-    this.props.fetchAllProducts();
+    this.props.fetchAllProducts(this.props.currentPage, this.numberOfRecords);
   }
 
+  fetchAllProducts = (pageNumber, pageSize) => {
+    this.props.fetchAllProducts(
+      pageNumber || this.props.currentPage,
+      pageSize || this.numberOfRecords
+    );
+  };
+
+  renderPagination() {
+    return (
+      <InvPagination
+        totalRecords={this.props.totalRecords}
+        numberOfRecordPerPage={this.numberOfRecords}
+        currentPage={this.props.currentPage}
+        fetchData={this.fetchAllProducts}
+      />
+    );
+  }
   renderTableHeader() {
     const { warehouseNames } = this.props;
 
@@ -39,13 +62,16 @@ class ProductList extends Component {
           <td>{product.sku_code}</td>
           <td>{product.name}</td>
           {product.Warehouses.map((warehouse) => {
-              const {item_count,low_item_threshold} = warehouse?.ProductWarehouse;
-              const isCountLow = item_count < low_item_threshold
+            const {
+              item_count,
+              low_item_threshold,
+            } = warehouse?.ProductWarehouse;
+            const isCountLow = item_count < low_item_threshold;
             return (
-                <td class={isCountLow ? "table-danger" : "table-success"}>
-                  Count : {item_count} <br />
-                  Theshold: {low_item_threshold}
-                </td>
+              <td className={isCountLow ? "table-danger" : "table-success"}>
+                Count : {item_count} <br />
+                Theshold: {low_item_threshold}
+              </td>
             );
           })}
         </tr>
@@ -60,6 +86,7 @@ class ProductList extends Component {
             <PlusIcon aria-label="Add new warehouse" /> New Warehouse
           </Button>
         </div>
+        {this.renderPagination()}
         <Table hover responsive bordered>
           <thead>{this.renderTableHeader()}</thead>
           <tbody>{this.renderTableRows()}</tbody>
@@ -74,12 +101,15 @@ const mapStateToProps = (state) => {
   return {
     productList: state.products.products,
     warehouseNames: state.products.warehouses,
+    totalRecords: state.products.count,
+    currentPage: state.products.currentPage,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchAllProducts: () => dispatch(fetchAllProducts()),
+    fetchAllProducts: (pageNumber, pageSize) =>
+      dispatch(fetchAllProducts(pageNumber, pageSize)),
   };
 };
 

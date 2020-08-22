@@ -4,7 +4,7 @@ const { Product, Warehouse, ProductWarehouse } = require("../models");
 
 ProductRoute.route("/").get(async (req, res) => {
   const pageSizeNumber = Number(req.query.pageSize);
-  const skipEntities = Number(req.query.pageNumber) * pageSizeNumber;
+  const skipEntities = Number(req.query.pageNumber - 1) * pageSizeNumber;
   try {
     const products = await Product.findAll({
       include: [
@@ -20,12 +20,13 @@ ProductRoute.route("/").get(async (req, res) => {
       offset: skipEntities,
       limit: pageSizeNumber,
     });
-
+    const count = await Product.count();
     const warehouses = await Warehouse.findAll({
       attributes: ["name"],
     });
     const data = {
       products,
+      count,
       warehouses: warehouses.map((w) => w.name),
     };
     res.status(200).json(data);

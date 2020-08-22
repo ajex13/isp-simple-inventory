@@ -2,7 +2,7 @@ import { ALL_PRODUCTS_FETCHED } from "./constants";
 
 const axios = require("axios");
 
-export const fetchAllProducts = (pageNumber=1, pageSize=20) => {
+export const fetchAllProducts = (pageNumber, pageSize) => {
   return (dispatch) => {
     let url = `/products?pageNumber=${pageNumber}&pageSize=${pageSize}`;
 
@@ -14,6 +14,8 @@ export const fetchAllProducts = (pageNumber=1, pageSize=20) => {
           data: {
             products: data.products,
             warehouses: data.warehouses,
+            count: data.count,
+            currentPage: pageNumber
           },
         });
       })
