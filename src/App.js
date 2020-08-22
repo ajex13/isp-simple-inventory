@@ -3,7 +3,11 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Home from "./screens/Home/component";
 import ProductList from "./screens/Product/List/component";
 import Header from "./components/Header/component";
+import {Container} from "reactstrap";
+const axios = require('axios');
 
+axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.headers.common['Content-Type'] = 'application/json';
 class App extends Component {
   render() {
     return (
@@ -11,7 +15,8 @@ class App extends Component {
         <Router>
           <div>
             <Header />
-            <div style={{ top:"40px", width: "800px", margin: "auto" }}>
+            <Container>
+            <div style={{paddingTop:"40px"}}>
               <Switch>
                 <Route path="/products">
                   <ProductList />
@@ -21,6 +26,8 @@ class App extends Component {
                 </Route>
               </Switch>
             </div>
+            </Container>
+
           </div>
         </Router>
       </div>
