@@ -76,4 +76,25 @@ describe("ProductsApi", () => {
   });
 
   // test create new warehouse
+  describe("POST /warehouses", () => {
+    it("should create a new warehouse", (done) => {
+      const payload = {
+        name: "Chennai",
+        pincode: 600001,
+        max_capacity: 1000,
+      };
+
+      chai
+        .request(server)
+        .post(`/warehouses`)
+        .send(payload)
+        .end((error, response) => {
+          console.log("error", error);
+          response.should.have.status(201);
+          response.body.should.have.property("wh_code");
+          response.body.should.have.property("Warehouses");
+          done();
+        });
+    });
+  });
 });
