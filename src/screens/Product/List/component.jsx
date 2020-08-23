@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Button, Table, Row, Col } from "reactstrap";
 import { PlusIcon } from "@primer/octicons-react";
 import InvPagination from "../../../components/InvPagination/component";
+import { withRouter } from "react-router-dom";
 
 class ProductList extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class ProductList extends Component {
     );
   };
 
-  renderPagination() {
+  renderPagination = () => {
     return (
       <InvPagination
         totalRecords={this.props.totalRecords}
@@ -31,8 +32,13 @@ class ProductList extends Component {
         fetchData={this.fetchAllProducts}
       />
     );
-  }
-  renderTableHeader() {
+  };
+
+  onProductRowClick = (id) => {
+    this.props.history.push(`/products/${id}`);
+  };
+
+  renderTableHeader = () => {
     const { warehouseNames } = this.props;
 
     return (
@@ -44,9 +50,9 @@ class ProductList extends Component {
         ))}
       </tr>
     );
-  }
+  };
 
-  renderTableRows() {
+  renderTableRows = () => {
     const { productList } = this.props;
 
     if (!productList) {
@@ -64,8 +70,12 @@ class ProductList extends Component {
       );
     }
     return productList.map((product, index) => {
+      const { history } = this.props;
       return (
-        <tr key={product.id}>
+        <tr
+          key={product.id}
+          onClick={() => history.push(`products/${product.id}`)}
+        >
           <td>{product.sku_code}</td>
           <td>{product.name}</td>
           {product.Warehouses.map((warehouse) => {
@@ -84,15 +94,16 @@ class ProductList extends Component {
         </tr>
       );
     });
-  }
+  };
   render() {
+    const { history } = this.props;
     return (
       <div>
         <Row>
           <Col>{this.renderPagination()}</Col>
           <Col>
             <div className="d-flex flex-row-reverse mb-2">
-              <Button color="primary" onClick={true}>
+              <Button color="primary" onClick={()=> history.push(`/warehouses/new`)}>
                 <PlusIcon aria-label="Add new warehouse" /> New Warehouse
               </Button>
             </div>
@@ -124,4 +135,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ProductList)
+);
