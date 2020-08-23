@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import { fetchAllProducts } from "./actions";
 import { connect } from "react-redux";
-import { Button, Table } from "reactstrap";
+import { Button, Table, Row, Col } from "reactstrap";
 import { PlusIcon } from "@primer/octicons-react";
 import InvPagination from "../../../components/InvPagination/component";
+import { withRouter } from "react-router-dom";
 
 class ProductList extends Component {
-  constructor(props){
-    super(props) 
+  constructor(props) {
+    super(props);
     this.numberOfRecords = 20;
-  }  
-  
+  }
+
   componentDidMount() {
     this.props.fetchAllProducts(this.props.currentPage, this.numberOfRecords);
   }
@@ -22,7 +23,7 @@ class ProductList extends Component {
     );
   };
 
-  renderPagination() {
+  renderPagination = () => {
     return (
       <InvPagination
         totalRecords={this.props.totalRecords}
@@ -31,8 +32,13 @@ class ProductList extends Component {
         fetchData={this.fetchAllProducts}
       />
     );
-  }
-  renderTableHeader() {
+  };
+
+  onProductRowClick = (id) => {
+    this.props.history.push(`/products/${id}`);
+  };
+
+  renderTableHeader = () => {
     const { warehouseNames } = this.props;
 
     return (
@@ -44,9 +50,9 @@ class ProductList extends Component {
         ))}
       </tr>
     );
-  }
+  };
 
-  renderTableRows() {
+  renderTableRows = () => {
     const { productList } = this.props;
 
     if (!productList) {
@@ -56,9 +62,20 @@ class ProductList extends Component {
         </tr>
       );
     }
-    return productList.map((product, index) => {
+    if (productList?.length <= 0) {
       return (
-        <tr key={product.id}>
+        <tr>
+          <td colSpan={5}>No records found.</td>
+        </tr>
+      );
+    }
+    return productList.map((product, index) => {
+      const { history } = this.props;
+      return (
+        <tr
+          key={product.id}
+          onClick={() => history.push(`products/${product.id}`)}
+        >
           <td>{product.sku_code}</td>
           <td>{product.name}</td>
           {product.Warehouses.map((warehouse) => {
@@ -70,23 +87,28 @@ class ProductList extends Component {
             return (
               <td className={isCountLow ? "table-danger" : "table-success"}>
                 Count : {item_count} <br />
-                Theshold: {low_item_threshold}
+                Threshold: {low_item_threshold}
               </td>
             );
           })}
         </tr>
       );
     });
-  }
+  };
   render() {
+    const { history } = this.props;
     return (
       <div>
-        <div className="d-flex flex-row-reverse mb-2">
-          <Button color="primary" onClick={true}>
-            <PlusIcon aria-label="Add new warehouse" /> New Warehouse
-          </Button>
-        </div>
-        {this.renderPagination()}
+        <Row>
+          <Col>{this.renderPagination()}</Col>
+          <Col>
+            <div className="d-flex flex-row-reverse mb-2">
+              <Button color="primary" onClick={()=> history.push(`/warehouses/new`)}>
+                <PlusIcon aria-label="Add new warehouse" /> New Warehouse
+              </Button>
+            </div>
+          </Col>
+        </Row>
         <Table hover responsive bordered>
           <thead>{this.renderTableHeader()}</thead>
           <tbody>{this.renderTableRows()}</tbody>
@@ -97,7 +119,6 @@ class ProductList extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("globalstate", state);
   return {
     productList: state.products.products,
     warehouseNames: state.products.warehouses,
@@ -113,4 +134,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductList);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(ProductList)
+);

@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./screens/Home/component";
+import About from "./screens/About/component";
 import ProductList from "./screens/Product/List/component";
+import ProductDetails from "./screens/Product/Details/component";
+import CreateWarehouse from "./screens/Warehouse/Create/component";
 import Header from "./components/Header/component";
 import {Container} from "reactstrap";
 const axios = require('axios');
@@ -18,11 +20,17 @@ class App extends Component {
             <Container>
             <div style={{paddingTop:"40px"}}>
               <Switch>
-                <Route path="/products">
+                <Route path="/products/:id">
+                  <ProductDetails />  
+                </Route> 
+                <Route exact path="/">
                   <ProductList />
                 </Route>
-                <Route path="/">
-                  <Home />
+                <Route exact path="/warehouses/new">
+                  <CreateWarehouse/>
+                </Route>
+                <Route exact path="/about">
+                  <About />
                 </Route>
               </Switch>
             </div>

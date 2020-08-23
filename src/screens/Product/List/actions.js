@@ -22,7 +22,12 @@ export const fetchAllProducts = (pageNumber, pageSize) => {
       .catch(() => {
         dispatch({
           type: ALL_PRODUCTS_FETCHED,
-          data: [],
+          data: {
+            products: [],
+            warehouses: [],
+            count: 0,
+            currentPage: pageNumber
+          },
         });
       });
   };
