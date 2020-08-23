@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./screens/Home/component";
+import About from "./screens/About/component";
 import ProductList from "./screens/Product/List/component";
 import Header from "./components/Header/component";
 import {Container} from "reactstrap";
@@ -18,11 +18,11 @@ class App extends Component {
             <Container>
             <div style={{paddingTop:"40px"}}>
               <Switch>
-                <Route path="/products">
+                <Route exact path="/">
                   <ProductList />
                 </Route>
-                <Route path="/">
-                  <Home />
+                <Route exact path="/about">
+                  <About />
                 </Route>
               </Switch>
             </div>

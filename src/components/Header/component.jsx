@@ -8,8 +8,7 @@ import {
   NavItem,
   NavLink,
 } from "reactstrap";
-
-import { HomeIcon, ClippyIcon } from "@primer/octicons-react";
+import { InfoIcon, ClippyIcon } from "@primer/octicons-react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,12 +23,12 @@ export default function Header() {
           <Nav className="mr-auto" navbar>
             <NavItem>
               <NavLink href="/">
-                <HomeIcon /> Home
+                <ClippyIcon /> Products
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/products">
-                <ClippyIcon /> Products
+              <NavLink href="/about">
+                <InfoIcon /> About
               </NavLink>
             </NavItem>
           </Nav>

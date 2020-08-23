@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { fetchAllProducts } from "./actions";
 import { connect } from "react-redux";
-import { Button, Table } from "reactstrap";
+import { Button, Table, Row, Col } from "reactstrap";
 import { PlusIcon } from "@primer/octicons-react";
 import InvPagination from "../../../components/InvPagination/component";
 
 class ProductList extends Component {
-  constructor(props){
-    super(props) 
+  constructor(props) {
+    super(props);
     this.numberOfRecords = 20;
-  }  
-  
+  }
+
   componentDidMount() {
     this.props.fetchAllProducts(this.props.currentPage, this.numberOfRecords);
   }
@@ -56,6 +56,13 @@ class ProductList extends Component {
         </tr>
       );
     }
+    if (productList?.length <= 0) {
+      return (
+        <tr>
+          <td colSpan={5}>No records found.</td>
+        </tr>
+      );
+    }
     return productList.map((product, index) => {
       return (
         <tr key={product.id}>
@@ -81,12 +88,16 @@ class ProductList extends Component {
   render() {
     return (
       <div>
-        <div className="d-flex flex-row-reverse mb-2">
-          <Button color="primary" onClick={true}>
-            <PlusIcon aria-label="Add new warehouse" /> New Warehouse
-          </Button>
-        </div>
-        {this.renderPagination()}
+        <Row>
+          <Col>{this.renderPagination()}</Col>
+          <Col>
+            <div className="d-flex flex-row-reverse mb-2">
+              <Button color="primary" onClick={true}>
+                <PlusIcon aria-label="Add new warehouse" /> New Warehouse
+              </Button>
+            </div>
+          </Col>
+        </Row>
         <Table hover responsive bordered>
           <thead>{this.renderTableHeader()}</thead>
           <tbody>{this.renderTableRows()}</tbody>
