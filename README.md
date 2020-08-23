@@ -19,3 +19,17 @@
 
 
 Start the Node.js server using this command: `nodemon server`
+
+
+ ## Testing
+
+ API testing : `npm run test:api`
+
+ App Test : `npm run test` 
+
+
+ ## IN case database file is lost/corrupted 
+
+ run migrations : `npx sequelize-cli db:migrate`
+
+ run seeder : `npx sequelize-cli db:seed:all`
