@@ -110,7 +110,7 @@ class ProductDetails extends Component {
               );
             })}
           </Table>
-          <Button onClick={this.handleUpdate}>Save</Button>
+          <Button color="success" onClick={this.handleUpdate}>Save</Button>
         </CardBody>
       </Card>
     );
