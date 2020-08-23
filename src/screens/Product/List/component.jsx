@@ -87,7 +87,7 @@ class ProductList extends Component {
             return (
               <td className={isCountLow ? "table-danger" : "table-success"}>
                 Count : {item_count} <br />
-                Theshold: {low_item_threshold}
+                Threshold: {low_item_threshold}
               </td>
             );
           })}
@@ -119,7 +119,6 @@ class ProductList extends Component {
 }
 
 const mapStateToProps = (state) => {
-  console.log("globalstate", state);
   return {
     productList: state.products.products,
     warehouseNames: state.products.warehouses,
