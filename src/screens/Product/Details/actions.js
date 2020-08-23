@@ -26,6 +26,7 @@ export const updateProduct = (productId, request) => {
             dispatch(
                 fetchProductDetails(productId)
             );
+            alert("Updated Successfully!")
         }).catch(() => {
 
         });
