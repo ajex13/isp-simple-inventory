@@ -11,11 +11,14 @@ describe("ProductsApi", () => {
     it("should fetch all products", (done) => {
       chai
         .request(server)
-        .get("/products")
+        .get("/products?pageNumber=1&pageSize=20")
         .end((error, response) => {
           console.log("error", error);
           response.should.have.status(200);
-          response.body.should.be.a("array");
+          response.body.should.be.a("object");
+          response.body.should.have.property("products");
+          response.body.should.have.property("count");
+          response.body.should.have.property("warehouses");
           done();
         });
     });
@@ -92,7 +95,6 @@ describe("ProductsApi", () => {
           console.log("error", error);
           response.should.have.status(201);
           response.body.should.have.property("wh_code");
-          response.body.should.have.property("Warehouses");
           done();
         });
     });
